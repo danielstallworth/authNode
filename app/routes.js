@@ -5,6 +5,7 @@
 // Signup Page (/signup)
 // Handle the POST for both login
 // Handle the POST for both signup
+// FB routes for FB signin
 // Profile Page (after logged in)
 
 // app/routes.js
@@ -57,7 +58,7 @@ module.exports = function(app, passport) {
 		failureFlash : true // allow flash messages
 	}));
 
-	
+
 	// =====================================
 	// PROFILE SECTION =====================
 	// =====================================
@@ -68,6 +69,19 @@ module.exports = function(app, passport) {
 			user : req.user // get the user out of session and pass to template
 		});
 	});
+
+	// =====================================
+	// FACEBOOK ROUTES =====================
+	// =====================================
+	// route for facebook authentication and login
+	app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+
+	// handle the callback after facebook has authenticated the user
+	app.get('/auth/facebook/callback',
+		passport.authenticate('facebook', {
+			successRedirect : '/profile',
+			failureRedirect : '/'
+		}));
 
 	// =====================================
 	// LOGOUT ==============================
